@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thermochemistry Diploma Review Quiz</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #000000;
+            background-color: #ffffff;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .quiz-container {
+            width: 100%;
+            max-width: 700px;
+            margin-top: 20px;
+        }
+        h1 {
+            font-size: 24px;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #444444;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            height: 12px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #000000;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .progress-text {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: right;
+        }
+        .info-box {
+            background-color: #f9f9f9;
+            border-left: 4px solid #000000;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 15px;
+            white-space: pre-line;
+            border: 1px solid #e0e0e0;
+            border-left: 4px solid #000000;
+        }
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .options-container {
+            margin-bottom: 25px;
+        }
+        .option-label {
+            display: block;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #000000;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .option-label:hover {
+            background-color: #f0f0f0;
+        }
+        .option-label input {
+            margin-right: 10px;
+        }
+        .numeric-container {
+            margin-bottom: 25px;
+        }
+        .numeric-input {
+            width: 100%;
+            max-width: 250px;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #000000;
+            border-radius: 4px;
+            display: block;
+            margin-top: 10px;
+        }
+        .matching-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 60px);
+            gap: 10px;
+            margin-top: 15px;
+            margin-bottom: 25px;
+        }
+        .matching-box {
+            width: 60px;
+            padding: 10px;
+            font-size: 18px;
+            text-align: center;
+            border: 1px solid #000000;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        .feedback-box {
+            margin-top: 25px;
+            padding: 15px;
+            border: 2px dashed #000000;
+            border-radius: 4px;
+            display: none;
+            background-color: #fafafa;
+        }
+        .feedback-title {
+            font-weight: bold;
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+        .mistake-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #000000;
+            border-radius: 4px;
+        }
+        .mistake-q {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .hidden {
+            display: none;
+        }
+        .row-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .row-table th, .row-table td {
+            border: 1px solid #000000;
+            padding: 8px;
+            text-align: center;
+        }
+        .row-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <h1>Thermochemistry Diploma Review</h1>
+        <div class="subtitle">Reference File: Thermochemistry_Diploma_Questions.PDF</div>
+        
+        <!-- Progress System -->
+        <div id="progress-area">
+            <div id="progress-text" class="progress-text">Question 1 of 61</div>
+            <div class="progress-container">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+        </div>
+
+        <!-- Quiz Display -->
+        <div id="quiz-card">
+            <div id="info-context" class="info-box hidden"></div>
+            <div id="question-text" class="question-text"></div>
+            
+            <div id="interaction-placeholder"></div>
+
+            <button id="action-btn" onclick="handleAction()">Submit Answer</button>
+            
+            <div id="feedback-container" class="feedback-box">
+                <div id="feedback-status" class="feedback-title"></div>
+                <div id="feedback-text"></div>
+            </div>
+        </div>
+
+        <!-- Results & Summary -->
+        <div id="score-card" class="hidden">
+            <h2>Evaluation Complete!</h2>
+            <p id="final-score" style="font-size: 22px; font-weight: bold; margin-bottom: 10px;"></p>
+            <p id="percentage-score" style="font-size: 18px; margin-bottom: 30px;"></p>
+            
+            <div id="remediation-section" class="hidden">
+                <h3 style="border-top: 2px solid #000000; padding-top: 20px; margin-top: 20px;">Targeted Feedback & Common Pitfalls</h3>
+                <p>Review the details below for the specific conceptual questions you missed:</p>
+                <div id="mistakes-list"></div>
+            </div>
+            
+            <button onclick="location.reload()" style="margin-top: 25px;">Restart Review</button>
+        </div>
+    </div>
+
+    <script>
+        // Full Dataset mapping to all 61 items in Thermochemistry_Diploma_Questions.PDF
+        const quizData = [
+            { id: 1, type: "numeric", context: "A student designed a calorimetry experiment to determine the mass of water that could be heated by 400 kJ of energy released by burning butane gas:\nInitial temp = 21.6 °C\nFinal temp = 55.6 °C\nEnergy released = 400 kJ", question: "Calculate the mass of water involved in this experiment (in kg).", correct: "2.81", topic: "Calorimetry Calculations", remediation: "Remember to use q = m·c·ΔT rearranged to m = q / (c·ΔT). Watch units: convert q to J or ensure c matches kJ/kg·°C (4.19)." },
+            { id: 2, type: "numeric", context: "Thermite reaction:\n2 Al(s) + Fe2O3(s) → Al2O3(s) + 2 Fe(l)  ΔH = -851.5 kJ", question: "If the heat produced by 1.00 mol of Fe2O3(s) was absorbed by 7.40 kg of water, calculate the resulting temperature change (°C).", correct: "27.5", topic: "Molar Enthalpy Systems", remediation: "ΔH matches 1 mol of Fe2O3. Use ΔT = q / (m·c). Ensure you substitute m = 7.40 kg and c = 4.19 kJ/kg·°C." },
+            { id: 3, type: "mc", question: "The amount of heat released by a substance when the temperature of 250.0 g of water increases from 20.0 °C to 35.0 °C is:", options: ["12.4 kJ", "13.7 kJ", "15.7 kJ", "57.6 kJ"], correct: "C", topic: "Specific Heat Capacity", remediation: "q = m·c·ΔT = (0.2500 kg) * (4.19 kJ/kg·°C) * (15.0 °C) = 15.7 kJ." },
+            { id: 4, type: "mc", question: "Which of the following reactions would release the largest amount of energy?", options: ["2 Na(s) + Cl2(g) → 2 NaCl(s) [ΔH° = -822.2 kJ]", "CaO(s) + 3 C(s) + 462.3 kJ → CaC2(s) + CO(g)", "P4(s) + 10 Cl2(g) → 4 PCl5(g) ΔH° = -1 772 kJ", "C2H4(g) + 3 O2(g) → 2 CO2(g) + 2 H2O(g) + 1 322.9 kJ"], correct: "C", topic: "Enthalpy Expressions", remediation: "Compare net energy values on the product side or negative ΔH parameters. Reaction C releases a full 1,772 kJ." },
+            { id: 5, type: "mc", question: "The energy required to completely decompose 1.50 mol of PCl3(l) is:", options: ["480 kJ", "320 kJ", "287 kJ", "213 kJ"], correct: "A", topic: "Molar Enthalpy Ratios", remediation: "Ensure you multiply the standard molar enthalpy of decomposition by 1.50 mol." },
+            { id: 6, type: "mc", context: "A fire fueled by magnesium produces intense heat and light. Firefighters smother it with sand.", question: "Which equation represents the burning (combustion) of magnesium?", options: ["Mg(s) + ½ O2(g) + 601.6 kJ → MgO(s)", "Mg(s) + ½ O2(g) → MgO(s) + 601.6 kJ", "Mg(s) + ½ O2(g) → MgO(s)  ΔH° = +601.6 kJ", "2 Mg(s) + O2(g) + 1 203.2 kJ → 2 MgO(s)"], correct: "B", topic: "Exothermic Sign Formats", remediation: "Combustion is exothermic. Energy must sit on the product side, or ΔH must be explicit and negative." },
+            { id: 7, type: "mc", context: "Reaction: 4 Q(s) + Z2(g) + 100.0 kJ → 2 Q2Z(g)", question: "The ΔH value for the reverse reaction would be:", options: ["-100.0 kJ", "-50.0 kJ", "+50.0 kJ", "+100.0 kJ"], correct: "A", topic: "Reversing Equations", remediation: "When reversing an endothermic reaction (+100.0 kJ on reactants), the sign flips to negative (-100.0 kJ)." },
+            { id: 8, type: "mc", context: "Methane: -802.5 kJ/mol | Ethane: -1428.4 kJ/mol\nButane: -2657.3 kJ/mol | Octane: -5074.1 kJ/mol", question: "An interpretation that applies to this data is that the greater the number of carbon atoms, the:", options: ["lower the amount of energy stored", "greater the amount of energy released during combustion", "greater the strength of C-C bonds", "lower the amount of oxygen required"], correct: "B", topic: "Hydrocarbon Properties", remediation: "Longer carbon backbones yield higher values of combustion energy released per mole." },
+            { id: 9, type: "mc", context: "Technicians compared methane and propane fuels using a calorimeter to measure energy transferred.", question: "Which statement correctly classifies two of the variables?", options: ["Manipulated = type of fuel; Controlled = type of calorimeter.", "Responding = final temp; Controlled = type of fuel.", "Manipulated = type of fuel; Responding = temp change of fuel.", "Responding = final temp; Controlled = temp change of fuel."], correct: "A", topic: "Experimental Design", remediation: "The independent change is the fuel choice (manipulated). The equipment profile represents a controlled constant." },
+            { id: 10, type: "mc", context: "A technician seeks to minimize discrepancies between experimental data and theoretical values for propane combustion.", question: "How can the technician reduce data discrepancies?", options: ["Use a glass beaker to hold water", "Create an enclosing shield around the apparatus", "Raise the calorimeter higher above the flame", "Decrease the mass of water"], correct: "B", topic: "Calorimetry Error Mitigation", remediation: "Enclosing shields reduce heat loss to surroundings, which is the primary driver of low experimental efficiency." },
+            { id: 11, type: "mc", question: "If 44.7 kJ of energy is released when 1.65 g of ethanol (C2H5OH(l)) is burned, the molar enthalpy of combustion is:", options: ["-1.67 kJ/mol", "-27.1 kJ/mol", "-73.8 kJ/mol", "-1.25 × 10³ kJ/mol"], correct: "D", topic: "Molar Enthalpy Calculations", remediation: "Moles = 1.65g / 46.08g/mol = 0.0358 mol. ΔH = -44.7 kJ / 0.0358 mol = -1.25 × 10³ kJ/mol." },
+            { id: 12, type: "numeric", question: "The energy released when 0.500 mol of AgI(s) is formed from its constituent elements is _________ kJ. (ΔfH° of AgI = -61.8 kJ/mol)", correct: "30.9", topic: "Formation Scaling", remediation: "Multiply standard formation value by molar fraction: 0.500 mol × 61.8 kJ/mol = 30.9 kJ." },
+            { id: 13, type: "mc", question: "Which equation represents the balanced chemical equation for the decomposition of water and its energy transfer?", options: ["H2(g) + ½ O2(g) → H2O(l) + 285.8 kJ", "H2O(l) → H2(g) + ½ O2(g) + 285.8 kJ", "2 H2O(l) + 285.8 kJ → 2 H2(g) + O2(g)", "H2O(l) + 285.8 kJ → H2(g) + ½ O2(g)"], correct: "D", topic: "Decomposition Notations", remediation: "Decomposition requires adding energy to break bonds (endothermic). 1 mole of liquid water requires exactly 285.8 kJ." },
+            { id: 14, type: "mc", question: "The balanced equation, including appropriate enthalpy change for the combustion of ethanol, is:", options: ["C2H5OH(l) + 3 O2(g) → 2 CO2(g) + 3 H2O(g)  ΔH° = -1 234.8 kJ", "C2H5OH(l) + 3 O2(g) → 2 CO2(g) + 3 H2O(g)  ΔH° = +1 234.8 kJ", "C2H5OH(l) → 2 C(s) + 3 H2(g) + ½ O2(g)  ΔH° = +277.6 kJ", "C2H5OH(l) → 2 C(s) + 3 H2(g) + ½ O2(g)  ΔH° = -277.6 kJ"], correct: "A", topic: "Combustion Equations", remediation: "Combustion requires O2 as a reactant to yield CO2 and H2O with a corresponding negative enthalpy value." },
+            { id: 15, type: "mc", context: "Equation: 2 C4H10(g) + 13 O2(g) → 8 CO2(g) + 10 H2O(g) with complete standard enthalpy profiles.", question: "According to the equation above, the molar enthalpy change for the combustion of butane gas is:", options: ["-2 657.3 kJ/mol", "-2 877.3 kJ/mol", "-5 314.6 kJ/mol", "-5 754.6 kJ/mol"], correct: "A", topic: "Per-Mole Conversions", remediation: "The total energy released must be divided by the coefficient of butane (2 moles) to find the molar value." },
+            { id: 16, type: "mc", context: "A technician burns a 0.0150 mol sample of sucrose in a copper calorimeter containing 250.0 g of water.\nTemp change = +55.5 °C", question: "The experimental molar enthalpy of combustion for sucrose is approximately:", options: ["-8.72 × 10⁻¹ kJ/mol", "-1.40 × 10¹ kJ/mol", "-5.81 × 10¹ kJ/mol", "-3.88 × 10³ kJ/mol"], correct: "D", topic: "Molar Enthalpy From Water", remediation: "Calculate water heat: q = m·c·ΔT. Then divide by moles of fuel (0.0150 mol) and assign a negative value for combustion." },
+            { id: 17, type: "mc", htmlTable: "<tr><th>Row</th><th>i</th><th>ii</th></tr><tr><td>A</td><td>reactant</td><td>kinetic</td></tr><tr><td>B</td><td>reactant</td><td>potential</td></tr><tr><td>C</td><td>product</td><td>kinetic</td></tr><tr><td>D</td><td>product</td><td>potential</td></tr>", question: "Complete the statement: Energy is a (i), and water in the calorimeter changes primarily in (ii) energy.", options: ["Row A", "Row B", "Row C", "Row D"], correct: "C", topic: "Energy Classification", remediation: "Exothermic processes place energy on the product side. Water absorbing this heat experiences a shift in temperature (kinetic energy)." },
+            { id: 18, type: "numeric", context: "Calorimeter parameters for ammonium nitrate solution:\nWater mass context = 150.00 g | Salt = 1.68 g\nInitial T = 22.30 °C | Final T = 20.98 °C", question: "The experimental molar enthalpy of solution of ammonium nitrate is +/- _________ kJ/mol.", correct: "39.5", topic: "Enthalpy of Solution", remediation: "Use q = m·c·ΔT for water, calculate salt moles, and divide. The drop in temperature indicates an endothermic (+) configuration." },
+            { id: 19, type: "mc", question: "Which explanation accounts for an experimental molar enthalpy value that is lower than theoretical parameters?", options: ["The mass of methanol was lower than measured", "The final temperature was higher than measured", "The initial temperature was lower than measured", "Incomplete combustion produced CO(g) along with CO2(g)"], correct: "D", topic: "Experimental Error Analysis", remediation: "Incomplete combustion processes release significantly lower amounts of energy per mole than complete pathways." },
+            { id: 20, type: "mc", context: "Reaction: 4 HNO3(aq) + 5 N2H4(l) → 7 N2(g) + 12 H2O(g)  ΔH = -2 462.0 kJ", question: "Which statement is correct for the indicated reaction?", options: ["205.2 kJ are absorbed per mole of H2O produced", "351.7 kJ are absorbed per mole of N2 produced", "615.5 kJ are released per mole of HNO3 consumed", "492.4 kJ are released per mole of N2H4 produced"], correct: "C", topic: "Stoichiometric Energy Ratios", remediation: "Divide total enthalpy by compound coefficient. For HNO3: 2462.0 kJ / 4 = 615.5 kJ released per mole." },
+            { id: 21, type: "mc", context: "Equation: 2 CH3OH(l) + 3 O2(g) → 2 CO2(g) + 4 H2O(l) [Releases 1451.8 kJ total]", question: "The thermal energy released for the complete combustion of ONE mole of methanol is:", options: ["725.9 kJ/mol", "563.4 kJ/mol", "277.6 kJ/mol", "223.6 kJ/mol"], correct: "A", topic: "Molar Equivalents", remediation: "Divide the total reaction pathway energy by the balancing coefficient of methanol (2 moles)." },
+            { id: 22, type: "numeric", context: "Reaction: 2 CH3OH(l) + 3 O2(g) → 2 CO2(g) + 4 H2O(g)  ΔH° = -1 275.8 kJ", question: "The mass of methanol (in kg) that burns to produce an enthalpy change of -9.00 × 10⁴ kJ is _________ kg.", correct: "4.52", topic: "Mass-Enthalpy Stoichiometry", remediation: "Find moles needed: (-9.00 × 10⁴ kJ / -1275.8 kJ) * 2 moles. Convert those target moles into kilograms using molar mass." },
+            { id: 23, type: "mc", question: "The amount of methanol that must be burned to raise the temperature of 250.0 g of water from 20.0 °C to 35.0 °C is:", options: ["6.16 × 10⁻³ mol", "1.23 × 10⁻² mol", "2.46 × 10⁻² mol", "2.46 × 10¹ mol"], correct: "C", topic: "Combined Calorimetry Calculations", remediation: "Find water requirements via q = m·c·ΔT. Link this value to the molar combustion profiles of methanol." },
+            { id: 24, type: "mc", htmlTable: "<tr><th>Row</th><th>i</th><th>ii</th></tr><tr><td>A</td><td>exothermic</td><td>product</td></tr><tr><td>B</td><td>exothermic</td><td>reactant</td></tr><tr><td>C</td><td>endothermic</td><td>product</td></tr><tr><td>D</td><td>endothermic</td><td>reactant</td></tr>", question: "Based on a potential energy diagram showing products sitting lower than reactants (-200 kJ): The reaction is (i) and energy is included as a (ii).", options: ["Row A", "Row B", "Row C", "Row D"], correct: "A", topic: "Potential Energy Graphing", remediation: "When product energy drops below starting baselines, the reaction is exothermic and energy tracks as a product." },
+            { id: 25, type: "numeric", question: "Based on the Vanadium Chlorides diagram: Find the energy absorbed (kJ) when 0.350 mol of VCl4(l) decomposes into VCl2(s) and Cl2(g).", correct: "41.1", topic: "Hess's Law Diagrams", remediation: "Calculate differences between states on the diagram and scale down to match the 0.350 molar step parameter." },
+            { id: 26, type: "mc", question: "Which potential energy diagram correctly represents an exothermic octane combustion pathway balanced cleanly with 10,148.2 kJ for a doubled coefficient line?", options: ["Diagram A", "Diagram B", "Diagram C", "Diagram D"], correct: "C", topic: "Enthalpy Graphs", remediation: "Exothermic steps must point downward. Ensure total value scales appropriately with structural equation coefficients." },
+            { id: 27, type: "mc", question: "One reason dynamite releases large quantities of energy when it explodes is that the reaction is:", options: ["exothermic, and products have more potential energy", "exothermic, and reactants have more potential energy", "endothermic, and reactants have more potential energy", "endothermic, and products have more potential energy"], correct: "B", topic: "Explosion Energetics", remediation: "Exothermic pathways convert stored potential energy into active kinetic/thermal expressions." },
+            { id: 28, type: "mc", question: "A potential energy graph shows an upward step from elements to compound. This could represent the formation of:", options: ["ethane", "ethene", "butane", "pentane"], correct: "B", topic: "Endothermic Formations", remediation: "Most hydrocarbons have exothermic formations, but alkenes like ethene have positive values (endothermic)." },
+            { id: 29, type: "mc", htmlTable: "<tr><th>Row</th><th>i</th><th>ii</th></tr><tr><td>A</td><td>absorbed from</td><td>more potential</td></tr><tr><td>B</td><td>absorbed from</td><td>more kinetic</td></tr><tr><td>C</td><td>released to</td><td>less potential</td></tr><tr><td>D</td><td>released to</td><td>less kinetic</td></tr>", question: "Equation: Na(s) + ½ H2(g) + C(s) + 1.5 O2(g) → NaHCO3(s) + 947.7 kJ. Energy is (i) because product bonds contain (ii) energy.", options: ["Row A", "Row B", "Row C", "Row D"], correct: "C", topic: "Bond Energy Concepts", remediation: "Energy on the product side indicates heat is released. The products are more stable and contain less potential energy." },
+            { id: 30, type: "mc", question: "According to a standard downward potential energy step diagram for methane, the combustion is:", options: ["endothermic with negative ΔH", "endothermic with positive ΔH", "exothermic with negative ΔH", "exothermic with positive ΔH"], correct: "C", topic: "Graph Conventions", remediation: "Downward steps reflect exothermic processes, which always carry a negative ΔH sign." },
+            { id: 31, type: "mc", question: "Which diagram correctly maps the combustion of 2 moles of methanol (-1451.8 kJ complete drop)?", options: ["Diagram A", "Diagram B", "Diagram C", "Diagram D"], correct: "C", topic: "Enthalpy Scaling", remediation: "Ensure the graph points downward for combustion and reflects the full structural molar quantity value." },
+            { id: 32, type: "matching", question: "An enthalpy diagram shows a step UP (endothermic). Match which reaction index numbers fit this format (List the 4 relevant indices from options 1-8).", correct: "2467", topic: "Endothermic Sorting", remediation: "Identify all processes with positive ΔH values or where heat appears as a reactant input." },
+            { id: 33, type: "matching", question: "Match chemicals (1: O2, 2: CO, 3: CO2, 4: H2O(l), 5: H2O(g), 6: Glucose) to: Reactants in Photosynthesis & Open Hydrocarbon Products.", correct: "3435", topic: "Reaction Components", remediation: "Photosynthesis uses CO2 (3) and H2O(l) (4). Open combustion produces CO2 (3) and H2O(g) (5)." },
+            { id: 34, type: "mc", htmlTable: "<tr><th>Row</th><th>i</th><th>ii</th></tr><tr><td>A</td><td>Sun</td><td>light</td></tr><tr><td>B</td><td>Sun</td><td>chemical</td></tr><tr><td>C</td><td>plant</td><td>light</td></tr><tr><td>D</td><td>plant</td><td>chemical</td></tr>", question: "During photosynthesis, energy originating from the (i) is converted to (ii) energy stored in chemical bonds.", options: ["Row A", "Row B", "Row C", "Row D"], correct: "B", topic: "Energy In Biosystems", remediation: "Solar energy converts into chemical potential energy stored inside target sugar arrangements." },
+            { id: 35, type: "mc", question: "Which substance is produced during both automobile octane combustion and cellular respiration?", options: ["NO2(g)", "SO2(g)", "CO2(g)", "O2(g)"], correct: "C", topic: "Carbon Cycling", remediation: "Both combustion pathways oxidize organic skeletons into carbon dioxide waste outputs." },
+            { id: 36, type: "mc", question: "The original source of energy for reactants across global hydrocarbon systems is:", options: ["the Sun", "a fossil fuel", "a combustion reaction", "a decomposition reaction"], correct: "A", topic: "Primary Energy Inputs", remediation: "Fossil fuels store historic solar energy trapped via ancestral photosynthetic processes." },
+            { id: 37, type: "matching", question: "Rank equations (1 to 4) from SMALLEST to LARGEST enthalpy change per single mole of carbon dioxide gas produced.", correct: "3124", topic: "Per-Mole Comparisons", remediation: "Divide each total reaction enthalpy by its respective CO2 balance coefficient before ordering." },
+            { id: 38, type: "mc", htmlTable: "<tr><th>Row</th><th>i</th><th>ii</th></tr><tr><td>A</td><td>CO2 and H2O(l)</td><td>CO2 and H2O(g)</td></tr><tr><td>B</td><td>CO2 and H2O(l)</td><td>CO2 and H2O(l)</td></tr><tr><td>C</td><td>Glucose and O2</td><td>CO2 and H2O(g)</td></tr><tr><td>D</td><td>Glucose and O2</td><td>CO2 and H2O(l)</td></tr>", question: "The products of photosynthesis are (i) and the products of open hydrocarbon combustion are (ii).", options: ["Row A", "Row B", "Row C", "Row D"], correct: "C", topic: "Product Tracking", remediation: "Photosynthesis makes sugars and oxygen; open vehicle combustion releases CO2 and gaseous water vapor." },
+            { id: 39, type: "mc", question: "When comparing the combustion of fossil fuels to cellular respiration:", options: ["both produce CO2(g)", "respiration requires sunlight and combustion does not", "combustion is endothermic and respiration is exothermic", "combustion is exothermic and respiration is endothermic"], correct: "A", topic: "Process Overlaps", remediation: "Both processes break down organic molecules to release energy, producing carbon dioxide." },
+            { id: 40, type: "mc", question: "Which of the following statements accurately describes photosynthesis and cellular respiration?", options: ["Photosynthesis products have less PE than reactants", "Photosynthesis traps energy; respiration absorbs energy", "Photosynthesis is exothermic; respiration is endothermic", "Photosynthesis requires energy, and cellular respiration produces energy."], correct: "D", topic: "Bioenergetics Contrasts", remediation: "Photosynthesis is an endothermic solar storage loop; respiration clears that storage to generate cellular work." },
+            { id: 41, type: "mc", question: "Based on enthalpies of formation, which silicon halide is the most thermally stable?", options: ["SiF4(g) [-1617 kJ/mol]", "SiCl4(l) [-688 kJ/mol]", "SiBr4(l) [-458 kJ/mol]", "SiI4(s) [-190 kJ/mol]"], correct: "A", topic: "Thermal Stability Scales", remediation: "The compound with the most negative enthalpy of formation releases the most energy during creation and is toughest to break." },
+            { id: 42, type: "mc", question: "Which of the following listed reactions are classified as exothermic?", options: ["II only", "III only", "I and IV only", "II and III"], correct: "D", topic: "Exothermic Diagnostics", remediation: "Look for explicit energy listings on product lines or explicit negative ΔH notation fields." },
+            { id: 43, type: "mc", question: "Which of the following statements is TRUE for an endothermic reaction?", options: ["Energy is a product", "Temperature of surroundings increases", "Enthalpy change is negative", "Potential energy of products is greater than reactants"], correct: "D", topic: "Endothermic Metrics", remediation: "Endothermic settings step upward, yielding products that carry elevated potential energy profiles." },
+            { id: 44, type: "numeric", question: "Calculate the molar enthalpy of formation of cyclopropane using Hess's Law options provided (+/- kJ/mol).", correct: "78.7", topic: "Hess's Law Loops", remediation: "Manipulate given intermediate steps (flip/multiply) to algebraically isolate target structural targets." },
+            { id: 45, type: "matching", question: "List the reference numbers of compounds that require an input of energy during formation from elemental states.", correct: "2356", topic: "Endothermic Formations", remediation: "Identify chemical structures showing positive standalone values for standard formation enthalpy." },
+            { id: 46, type: "mc", question: "The molar enthalpy of combustion of propane in an open system is:", options: ["-103.8 kJ/mol", "-2 043.9 kJ/mol", "-2 219.9 kJ/mol", "-2 251.5 kJ/mol"], correct: "B", topic: "Propane In Open Environments", remediation: "Confirm values using data table resources checking water states as gaseous (open systems)." },
+            { id: 47, type: "mc", htmlTable: "<tr><th>Row</th><th>i</th><th>ii</th></tr><tr><td>A</td><td>released to</td><td>exothermic</td><td></td></tr>", question: "During ethanol combustion, energy is (i) the surroundings because the reaction is (ii).", options: ["Row A", "Row B", "Row C", "Row D"], correct: "A", topic: "System Boundary Flows", remediation: "Combustion dumps thermal energy outward, illustrating traditional exothermic behavior." },
+            { id: 48, type: "numeric", question: "When 1.50 g of ethanol is burned completely, calculate the total energy released (kJ).", correct: "40.2", topic: "Mass to Energy Steps", remediation: "Convert mass to moles, then scale by the standard molar combustion value of the compound." },
+            { id: 49, type: "numeric", question: "Calculate the net enthalpy change (+/- kJ) for the chlorate decomposition layout provided.", correct: "77.6", topic: "Enthalpy Changes", remediation: "Evaluate differences between raw product formation summations and reactant baselines." },
+            { id: 50, type: "mc", question: "Identify the type of reaction and ΔH value for the KO2 rebreather equation:", options: ["Endothermic, Negative", "Endothermic, Positive", "Exothermic, Negative", "Exothermic, Positive"], correct: "C", topic: "Sign Conventions", remediation: "Rebreather processes clear carbon dioxide exothermically, yielding negative ΔH values." },
+            { id: 51, type: "mc", question: "In the decomposition of hydrogen peroxide, the addition of MnO2(s) acts to:", options: ["increase activation energy", "increase energy released", "reduce net energy released", "provide an alternative energy pathway"], correct: "D", topic: "Catalyst Functions", remediation: "Catalysts provide lower-energy alternative mechanisms without altering total net enthalpy profiles." },
+            { id: 52, type: "mc", question: "Which statements describe the effect of an iron catalyst on food-heating reactions?", options: ["1 only", "1 and 3", "1, 2, and 4", "2 and 4 only"], correct: "B", topic: "Catalyst Properties", remediation: "Catalysts increase reaction rates (1) but have absolutely no effect on thermodynamic enthalpy endpoints (3)." },
+            { id: 53, type: "mc", question: "According to the catalyst coordinate diagram, the activation energy for the forward, catalyzed step is:", options: ["II minus I", "III minus I", "IV minus II", "IV minus III"], correct: "A", topic: "Activation Coordinates", remediation: "Activation energy spans from the reactant baseline floor (I) up to the peak of the catalyzed curve (II)." },
+            { id: 54, type: "mc", question: "Biological catalysts speed up processing conversions during brewing systems by:", options: ["allowing extreme operational windows", "increasing baseline barriers", "increasing transition timeframes", "decreasing the time it takes to convert"], correct: "D", topic: "Kinetic Profiles", remediation: "Lowering active kinetic barriers enables target processes to conclude much faster." },
+            { id: 55, type: "mc", question: "Which energy pathway diagram correctly represents BOTH catalyzed and uncatalyzed pathways for an exothermic process?", options: ["Diagram A", "Diagram B", "Diagram C", "Diagram D"], correct: "C", topic: "Catalyzed Graph Layouts", remediation: "The catalyzed line must show a lowered peak while keeping reactant and product baselines identical." },
+            { id: 56, type: "mc", question: "Which potential energy diagram represents the catalyzed and uncatalyzed reaction for mine methane mitigation?", options: ["Diagram A", "Diagram B", "Diagram C", "Diagram D"], correct: "A", topic: "Exothermic Catalysis Diagrams", remediation: "Methane oxidation is exothermic (products lie lower) with a dashed lower peak representing the catalyst path." },
+            { id: 57, type: "mc", question: "When manganese(IV) oxide is used as a catalyst, the enthalpy change for the decomposition:", options: ["stays the same", "becomes more exothermic", "becomes more endothermic", "changes signs"], correct: "A", topic: "Thermodynamic Constants", remediation: "Catalysts accelerate kinetics but never shift underlying state boundaries or total enthalpy profiles." },
+            { id: 58, type: "mc", htmlTable: "<tr><th>Row</th><th>i</th><th>ii</th></tr><tr><td>C</td><td>activation energy</td><td>I and II</td></tr>", question: "The energy barrier that must be overcome for the forward reaction to occur is (i), seen on the diagram as the difference between (ii).", options: ["Row A", "Row B", "Row C", "Row D"], correct: "C", topic: "Vocabulary Controls", remediation: "The initial activation barrier equals the distance from reactant baseline (I) to peak threshold (II)." },
+            { id: 59, type: "mc", htmlTable: "<tr><th>Row</th><th>i</th><th>ii</th></tr><tr><td>C</td><td>not change</td><td>increase</td></tr>", question: "Adding a catalyst to a vehicle's converter would (i) energy transferred and would (ii) the rate of forward reaction.", options: ["Row A", "Row B", "Row C", "Row D"], correct: "C", topic: "Catalytic Converters", remediation: "Catalysts leave total thermodynamic energy unchanged but accelerate forward and reverse operational rates." },
+            { id: 60, type: "matching", question: "Match reaction styles (1: Exothermic, 2: Endothermic) to: Photosynthesis, Respiration, Glucose Formation, Propane Combustion.", correct: "2121", topic: "Process Classifications", remediation: "Photosynthesis and Glucose Formation are endothermic (2). Respiration and Propane Combustion are exothermic (1)." },
+            { id: 61, type: "mc", htmlTable: "<tr><th>Row</th><th>i</th><th>ii</th></tr><tr><td>A</td><td>potential</td><td>a rearrangement of bonds</td></tr>", question: "Energy changes during propane combustion are primarily due to changes in (i) energy resulting from (ii).", options: ["Row A", "Row B", "Row C", "Row D"], correct: "A", topic: "Microscopic Changes", remediation: "Chemical changes convert internal bond potential energy into heat via structural bond rearrangements." }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let isAnswerSubmitted = false;
+        let missedRemediationList = [];
+
+        const infoContextEl = document.getElementById("info-context");
+        const questionTextEl = document.getElementById("question-text");
+        const interactionPlaceholder = document.getElementById("interaction-placeholder");
+        const actionBtn = document.getElementById("action-btn");
+        const feedbackContainer = document.getElementById("feedback-container");
+        const feedbackStatus = document.getElementById("feedback-status");
+        const feedbackText = document.getElementById("feedback-text");
+        const progressBar = document.getElementById("progress-bar");
+        const progressTextEl = document.getElementById("progress-text");
+
+        function loadQuestion() {
+            isAnswerSubmitted = false;
+            feedbackContainer.style.display = "none";
+            actionBtn.innerText = "Submit Answer";
+            
+            // Dynamic Progress Metrics
+            progressTextEl.innerText = `Question ${currentQuestionIndex + 1} of ${quizData.length}`;
+            let progressPercentage = (currentQuestionIndex / quizData.length) * 100;
+            progressBar.style.width = progressPercentage + "%";
+
+            let currentItem = quizData[currentQuestionIndex];
+
+            // Render Context Elements if available
+            if (currentItem.context || currentItem.htmlTable) {
+                let contextMarkup = currentItem.context ? currentItem.context : "";
+                if (currentItem.htmlTable) {
+                    contextMarkup += `<table class="row-table">${currentItem.htmlTable}</table>`;
+                }
+                infoContextEl.innerHTML = contextMarkup;
+                infoContextEl.classList.remove("hidden");
+            } else {
+                infoContextEl.classList.add("hidden");
+            }
+
+            questionTextEl.innerText = currentItem.question;
+            interactionPlaceholder.innerHTML = "";
+
+            // Dynamic Form Generation based on question schema
+            if (currentItem.type === "mc") {
+                currentItem.options.forEach((option, idx) => {
+                    let letter = String.fromCharCode(65 + idx);
+                    let label = document.createElement("label");
+                    label.className = "option-label";
+                    label.innerHTML = `<input type="radio" name="quiz-option" value="${letter}"> <strong>${letter}.</strong> ${option}`;
+                    interactionPlaceholder.appendChild(label);
+                });
+            } else if (currentItem.type === "numeric") {
+                let container = document.createElement("div");
+                container.className = "numeric-container";
+                container.innerHTML = `<label for="num-reply">Value: </label><input type="text" id="num-reply" class="numeric-input" placeholder="e.g. 2.81">`;
+                interactionPlaceholder.appendChild(container);
+            } else if (currentItem.type === "matching") {
+                let container = document.createElement("div");
+                container.innerHTML = `<p style="font-size:14px; margin-bottom:5px;">Enter 4-digit combination sequence:</p>`;
+                let grid = document.createElement("div");
+                grid.className = "matching-grid";
+                for(let i=0; i<4; i++){
+                    grid.innerHTML += `<input type="text" maxlength="1" class="matching-box" id="match-digit-${i}">`;
+                }
+                container.appendChild(grid);
+                interactionPlaceholder.appendChild(container);
+            }
+        }
+
+        function handleAction() {
+            if (!isAnswerSubmitted) {
+                evaluateAnswer();
+            } else {
+                advanceQuiz();
+            }
+        }
+
+        function evaluateAnswer() {
+            let currentItem = quizData[currentQuestionIndex];
+            let isCorrect = false;
+
+            if (currentItem.type === "mc") {
+                let selected = document.querySelector('input[name="quiz-option"]:checked');
+                if (!selected) {
+                    alert("Please select an answer option!");
+                    return;
+                }
+                isCorrect = (selected.value === currentItem.correct);
+                renderFeedback(isCorrect, `Correct Answer Option: ${currentItem.correct}`);
+                
+            } else if (currentItem.type === "numeric") {
+                let inputVal = document.getElementById("num-reply").value.trim();
+                if (!inputVal) {
+                    alert("Please enter a numeric response value!");
+                    return;
+                }
+                isCorrect = (parseFloat(inputVal) === parseFloat(currentItem.correct));
+                renderFeedback(isCorrect, `Expected Value: ${currentItem.correct}`);
+                
+            } else if (currentItem.type === "matching") {
+                let compilation = "";
+                for(let i=0; i<4; i++){
+                    compilation += document.getElementById(`match-digit-${i}`).value.trim();
+                }
+                if (compilation.length < 4) {
+                    alert("Please fill out all 4 digits in the matrix slots!");
+                    return;
+                }
+                isCorrect = (compilation === currentItem.correct);
+                renderFeedback(isCorrect, `Correct Sequence Matrix: ${currentItem.correct}`);
+            }
+
+            if (!isCorrect) {
+                missedRemediationList.push({
+                    qNum: currentQuestionIndex + 1,
+                    topic: currentItem.topic,
+                    tip: currentItem.remediation
+                });
+            } else {
+                score++;
+            }
+
+            isAnswerSubmitted = true;
+            actionBtn.innerText = "Next Question";
+        }
+
+        function renderFeedback(isCorrect, correctInfoText) {
+            feedbackContainer.style.display = "block";
+            if (isCorrect) {
+                feedbackStatus.innerText = "✓ Correct Answer";
+                feedbackText.innerText = "Concept verified. Proceed to the next module step.";
+            } else {
+                feedbackStatus.innerText = "✗ Incorrect";
+                feedbackText.innerText = `${correctInfoText}. Review explanation tracking notes at the conclusion of your deck session.`;
+            }
+        }
+
+        function advanceQuiz() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                showFinalResults();
+            }
+        }
+
+        function showFinalResults() {
+            document.getElementById("quiz-card").classList.add("hidden");
+            document.getElementById("progress-area").classList.add("hidden");
+            
+            const scoreCard = document.getElementById("score-card");
+            scoreCard.classList.remove("hidden");
+            
+            document.getElementById("final-score").innerText = `Total Score: ${score} / ${quizData.length}`;
+            let percentage = Math.round((score / quizData.length) * 100);
+            document.getElementById("percentage-score").innerText = `Accuracy Rate: ${percentage}%`;
+            
+            const remediationSection = document.getElementById("remediation-section");
+            const mistakesList = document.getElementById("mistakes-list");
+            
+            if (missedRemediationList.length > 0) {
+                remediationSection.classList.remove("hidden");
+                mistakesList.innerHTML = "";
+                missedRemediationList.forEach(item => {
+                    let container = document.createElement("div");
+                    container.className = "mistake-item";
+                    container.innerHTML = `
+                        <div class="mistake-q">Question ${item.qNum} — Core Theme: ${item.topic}</div>
+                        <div>${item.tip}</div>
+                    `;
+                    mistakesList.appendChild(container);
+                });
+            } else {
+                remediationSection.classList.add("hidden");
+                mistakesList.innerHTML = "<p>Excellent preparation! Zero computational or concept errors detected.</p>";
+            }
+        }
+
+        window.onload = loadQuestion;
+    </script>
+</body>
+</html>
