@@ -1,11 +1,12 @@
 import sys
 
 def run_quiz():
-    # Database of questions, options, answers, and explicit step-by-step hints for calculations
+    # Structural database categorized by conceptual focus areas
     questions = [
         {
             "id": 1,
             "type": "numerical",
+            "topic_area": "Calorimetry Calculations (q=mcΔT)",
             "text": "A student designed a calorimetry experiment to determine the mass of water that could be heated by 400 kJ of energy released by burning butane gas. \nInitial temperature: 21.6°C\nFinal temperature: 55.6°C\nEnergy released: 400 kJ\n\nCalculate the mass of water involved in this experiment (in kg).",
             "answer": "2.81",
             "is_calculation": True,
@@ -25,6 +26,7 @@ def run_quiz():
         {
             "id": 2,
             "type": "numerical",
+            "topic_area": "Calorimetry Calculations (q=mcΔT)",
             "text": "Thermite reaction equation:\n2 Al(s) + Fe2O3(s) -> Al2O3(s) + 2 Fe(l)  ΔH = -851.5 kJ\n\nIf the heat produced by the reaction of 1.00 mol of iron(III) oxide (Fe2O3) were absorbed by 7.40 kg of H2O(l) at room temperature, calculate the resulting temperature change (ΔT) of the water in °C.",
             "answer": "27.5",
             "is_calculation": True,
@@ -44,6 +46,7 @@ def run_quiz():
         {
             "id": 3,
             "type": "multiple_choice",
+            "topic_area": "Molar Enthalpy and Stoichiometry",
             "text": "The amount of heat released by a substance when the temperature of 250.0 g of water increases from 20.0°C to 35.0°C is:",
             "options": {
                 "A": "12.4 kJ",
@@ -55,7 +58,7 @@ def run_quiz():
             "is_calculation": True,
             "solution": (
                 "1. Use the equation: q = m * c * ΔT\n"
-                "2. Convert mass of water from grams to kilograms to match standard capacity units:\n"
+                "2. Convert mass of water from grams to kilograms:\n"
                 "   m = 250.0 g = 0.2500 kg\n"
                 "3. Calculate the change in temperature (ΔT):\n"
                 "   ΔT = 35.0°C - 20.0°C = 15.0°C\n"
@@ -68,9 +71,9 @@ def run_quiz():
         {
             "id": 4,
             "type": "multiple_choice",
+            "topic_area": "Molar Enthalpy and Stoichiometry",
             "text": "The energy required to completely decompose 1.50 mol of PCl3(l) is:\n(Given that forming 4 moles of products yields ΔH° = -1772 kJ for the standard process context)",
             "options": {
-                "id": 5,
                 "A": "480 kJ",
                 "B": "320 kJ",
                 "C": "287 kJ",
@@ -88,6 +91,7 @@ def run_quiz():
         {
             "id": 5,
             "type": "multiple_choice",
+            "topic_area": "Thermochemical Equations & Enthalpy Notation",
             "text": "Which of the following equations represents the burning (combustion) of magnesium?",
             "options": {
                 "A": "Mg(s) + 1/2 O2(g) + 601.6 kJ -> MgO(s)",
@@ -103,6 +107,10 @@ def run_quiz():
 
     score = 0
     total_questions = len(questions)
+    
+    # Dict to collect areas needing practice
+    # Structure: { "Topic Area": incorrect_count }
+    needs_practice = {}
 
     print("==================================================")
     print("      Welcome to the Thermochemistry Quiz         ")
@@ -111,9 +119,9 @@ def run_quiz():
 
     for idx, q in enumerate(questions, 1):
         print(f"\nQuestion {idx} of {total_questions}:")
+        print(f"Category: {q['topic_area']}")
         print(q["text"])
         
-        # Display options if it's a multiple-choice question
         if q["type"] == "multiple_choice":
             for key, val in q["options"].items():
                 print(f"  {key}. {val}")
@@ -121,13 +129,17 @@ def run_quiz():
         else:
             user_input = input("Your Answer (Numerical Value): ").strip()
 
-        # Check Answer & Provide Immediate Feedback
+        # Immediate Specific Feedback Loop
         if user_input == q["answer"].upper():
-            print("\n✨ CORRECT! Well done.")
+            print("\n✨ CORRECT! Outstanding work.")
             score += 1
         else:
-            print(f"\n❌ INCORRECT. The correct answer was: {q['answer']}")
-            # Check if it requires a calculation breakdown step
+            print(f"\n❌ INCORRECT.")
+            print(f"Specific Feedback: The correct answer is targeting the value/choice: '{q['answer']}'")
+            
+            # Log the problem topic area into practice diagnostics
+            needs_practice[q["topic_area"]] = needs_practice.get(q["topic_area"], 0) + 1
+            
             if q["is_calculation"]:
                 print("\n--- Step-by-Step Calculation Solution ---")
                 print(q["solution"])
@@ -137,19 +149,23 @@ def run_quiz():
 
         print("-" * 40)
 
-    # Final Summary Feedback Block at the End
+    # Generalized Diagnostic Feedback at the End
     print("\n==================================================")
     print("                QUIZ COMPLETE                     ")
     print("==================================================")
     percentage = (score / total_questions) * 100
     print(f"Your Total Score: {score} / {total_questions} ({percentage:.1f}%)")
     
-    if percentage == 100:
-        print("Perfect score! You have a fantastic grasp of thermochemistry.")
-    elif percentage >= 70:
-        print("Great job! You understand most of these concepts well.")
+    # Analyze and present targeted study suggestions
+    print("\n💡 PERFORMANCE DIAGNOSTIC & PRACTICE RECOMMENDATIONS:")
+    if not needs_practice:
+        print(" -> Master Status! No specific areas require remediation. You're ready for the exam.")
     else:
-        print("Good effort! Review the step-by-step solutions above to improve your calculations.")
+        print("Based on your incorrect attempts, you should focus your practice on these specific concepts:")
+        for area, missed_count in needs_practice.items():
+            print(f" • [!] {area} (Missed {missed_count} question{'s' if missed_count > 1 else ''})")
+        print("\nTip: Re-study these terms in your text and try solving related practice workbook issues.")
+        
     print("==================================================")
 
 if __name__ == "__main__":
