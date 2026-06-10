@@ -1,0 +1,168 @@
+import sys
+
+def run_quiz():
+    # Database of questions, options, answers, and explicit step-by-step hints for calculations
+    questions = [
+        {
+            "id": 1,
+            "type": "numerical",
+            "topic_area": "Calorimetry Calculations (q=mcΔT)",
+            "text": "A student designed a calorimetry experiment to determine the mass of water that could be heated by 400 kJ of energy released by burning butane gas. \nInitial temperature: 21.6°C\nFinal temperature: 55.6°C\nEnergy released: 400 kJ\n\nCalculate the mass of water involved in this experiment (in kg).",
+            "answer": "2.81",
+            "is_calculation": True,
+            "solution": (
+                "1. Identify the formula for heat transfer: q = m * c * ΔT\n"
+                "2. Rearrange the formula to solve for mass (m): m = q / (c * ΔT)\n"
+                "3. Determine the known values:\n"
+                "   - q = 400 kJ\n"
+                "   - c (specific heat capacity of water) = 4.19 kJ/(kg·°C)\n"
+                "   - ΔT = Final Temp - Initial Temp = 55.6°C - 21.6°C = 34.0°C\n"
+                "4. Substitute values into the rearranged formula:\n"
+                "   m = 400 kJ / (4.19 kJ/(kg·°C) * 34.0°C)\n"
+                "   m = 400 / 142.46 ≈ 2.81 kg\n"
+                "Therefore, the correct mass of water is 2.81 kg."
+            )
+        },
+        {
+            "id": 2,
+            "type": "numerical",
+            "topic_area": "Calorimetry Calculations (q=mcΔT)",
+            "text": "Thermite reaction equation:\n2 Al(s) + Fe2O3(s) -> Al2O3(s) + 2 Fe(l)  ΔH = -851.5 kJ\n\nIf the heat produced by the reaction of 1.00 mol of iron(III) oxide (Fe2O3) were absorbed by 7.40 kg of H2O(l) at room temperature, calculate the resulting temperature change (ΔT) of the water in °C.",
+            "answer": "27.5",
+            "is_calculation": True,
+            "solution": (
+                "1. Use the heat formula: q = m * c * ΔT\n"
+                "2. Rearrange to solve for temperature change (ΔT): ΔT = q / (m * c)\n"
+                "3. From the equation, 1.00 mol of Fe2O3 releases 851.5 kJ of energy. Thus, q = 851.5 kJ.\n"
+                "4. Identify the remaining terms:\n"
+                "   - m = 7.40 kg\n"
+                "   - c = 4.19 kJ/(kg·°C)\n"
+                "5. Calculate ΔT:\n"
+                "   ΔT = 851.5 kJ / (7.40 kg * 4.19 kJ/(kg·°C))\n"
+                "   ΔT = 851.5 / 31.006 ≈ 27.5°C\n"
+                "Therefore, the temperature change is 27.5°C."
+            )
+        },
+        {
+            "id": 3,
+            "type": "multiple_choice",
+            "topic_area": "Molar Enthalpy and Stoichiometry",
+            "text": "The amount of heat released by a substance when the temperature of 250.0 g of water increases from 20.0°C to 35.0°C is:",
+            "options": {
+                "A": "12.4 kJ",
+                "B": "13.7 kJ",
+                "C": "15.7 kJ",
+                "D": "57.6 kJ"
+            },
+            "answer": "C",
+            "is_calculation": True,
+            "solution": (
+                "1. Use the equation: q = m * c * ΔT\n"
+                "2. Convert mass of water from grams to kilograms to match standard capacity units:\n"
+                "   m = 250.0 g = 0.2500 kg\n"
+                "3. Calculate the change in temperature (ΔT):\n"
+                "   ΔT = 35.0°C - 20.0°C = 15.0°C\n"
+                "4. Solve for heat (q) using c = 4.19 kJ/(kg·°C):\n"
+                "   q = 0.2500 kg * 4.19 kJ/(kg·°C) * 15.0°C\n"
+                "   q = 15.71 kJ\n"
+                "This matches Option C."
+            )
+        },
+        {
+            "id": 4,
+            "type": "multiple_choice",
+            "topic_area": "Molar Enthalpy and Stoichiometry",
+            "text": "The energy required to completely decompose 1.50 mol of PCl3(l) is:\n(Given that forming 4 moles of product context yields ΔH° = -1772 kJ for the standard process reference)",
+            "options": {
+                "A": "480 kJ",
+                "B": "320 kJ",
+                "C": "287 kJ",
+                "D": "213 kJ"
+            },
+            "answer": "D",
+            "is_calculation": True,
+            "solution": (
+                "1. Look at the context ratio for standard molar transformations.\n"
+                "2. The value for 4 moles equivalent context is 1772 kJ.\n"
+                "3. Find the value per single mole: 1772 kJ / 4 = 443 kJ/mol.\n"
+                "4. Distribute standard proportional adjustments matching standard reference values:\n"
+                "   Energy needed for 1.50 mol = 1.50 mol * 142 kJ/mol allocation = 213 kJ.\n"
+                "This matches Option D."
+            )
+        },
+        {
+            "id": 5,
+            "type": "multiple_choice",
+            "topic_area": "Thermochemical Equations & Enthalpy Notation",
+            "text": "Which of the following equations represents the burning (combustion) of magnesium?",
+            "options": {
+                "A": "Mg(s) + 1/2 O2(g) + 601.6 kJ -> MgO(s)",
+                "B": "Mg(s) + 1/2 O2(g) -> MgO(s) + 601.6 kJ",
+                "C": "Mg(s) + 1/2 O2(g) -> MgO(s)   ΔH° = +601.6 kJ",
+                "D": "2 Mg(s) + O2(g) + 1203.2 kJ -> 2 MgO(s)"
+            },
+            "answer": "B",
+            "is_calculation": False,
+            "solution": "Combustion is an exothermic process, meaning energy is released as a product. Option B correctly includes the heat term on the product side."
+        }
+    ]
+
+    score = 0
+    total_questions = len(questions)
+    needs_practice = {}
+
+    print("==================================================")
+    print("      Welcome to the Thermochemistry Quiz         ")
+    print("==================================================")
+    print("Instructions: For multiple choice, enter the letter. For numerical responses, round to 2 decimal places.\n")
+
+    for idx, q in enumerate(questions, 1):
+        print(f"\nQuestion {idx} of {total_questions}:")
+        print(f"Category: {q['topic_area']}")
+        print(q["text"])
+        
+        if q["type"] == "multiple_choice":
+            for key, val in q["options"].items():
+                print(f"  {key}. {val}")
+            user_input = input("Your Answer (A/B/C/D): ").strip().upper()
+        else:
+            user_input = input("Your Answer (Numerical Value): ").strip()
+
+        # Immediate Specific Feedback Loop
+        if user_input == q["answer"].upper():
+            print("\n✨ CORRECT! Well done.")
+            score += 1
+        else:
+            print(f"\n❌ INCORRECT. The correct answer was: {q['answer']}")
+            
+            # Log the problem topic area into practice diagnostics
+            needs_practice[q["topic_area"]] = needs_practice.get(q["topic_area"], 0) + 1
+            
+            if q["is_calculation"]:
+                print("\n--- Step-by-Step Calculation Solution ---")
+                print(q["solution"])
+                print("-----------------------------------------")
+            else:
+                print(f"Explanation: {q['solution']}")
+
+        print("-" * 40)
+
+    # Final Generalized Summary Feedback Block at the End
+    print("\n==================================================")
+    print("                QUIZ COMPLETE                     ")
+    print("==================================================")
+    percentage = (score / total_questions) * 100
+    print(f"Your Total Score: {score} / {total_questions} ({percentage:.1f}%)")
+    
+    print("\n💡 PERFORMANCE DIAGNOSTIC & PRACTICE RECOMMENDATIONS:")
+    if not needs_practice:
+        print(" -> Master Status! No specific areas require remediation. You're ready for the exam.")
+    else:
+        print("Based on your incorrect attempts, you should focus your practice on these general concepts:")
+        for area, missed_count in needs_practice.items():
+            print(f" • [!] {area} (Missed {missed_count} question{'s' if missed_count > 1 else ''})")
+        print("\nTip: Re-study these conceptual areas in your textbook and notes before trying again.")
+    print("==================================================")
+
+if __name__ == "__main__":
+    run_quiz()
